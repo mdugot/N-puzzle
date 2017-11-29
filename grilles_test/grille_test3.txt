@@ -1,0 +1,6 @@
+# ceci est un commentaire # niark
+ #other
+3
+1 2 3#comment
+4 2 5 #comment
+0 7 8
