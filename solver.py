@@ -18,20 +18,58 @@ def defaultAlgo(solver):
 
 class Solver:
 	def __init__(self, parser):
-		print("Nouveau Solver\n")
+		msg = """\033[1;31m
+		╦ ╦╔═╗╦  ╔═╗╔═╗╔╦╗╔═╗    ╦╔╗╔    ╔╗╔   ╔═╗╦ ╦╔═╗╔═╗╦  ╔═╗ 
+		║║║║╣ ║  ║  ║ ║║║║║╣     ║║║║    ║║║───╠═╝║ ║╔═╝╔═╝║  ║╣  
+		╚╩╝╚═╝╩═╝╚═╝╚═╝╩ ╩╚═╝    ╩╝╚╝    ╝╚╝   ╩  ╚═╝╚═╝╚═╝╩═╝╚═╝ 
+		╔╗ ╦ ╦    ╔╦╗╔═╗╦═╗╦  ╦╔╗╔    ╔═╗╔╗╔╔╦╗    ╔╦╗╦╔═╗╔╗╔╔═╗
+		╠╩╗╚╦╝    ║║║║╣ ╠╦╝║  ║║║║    ╠═╣║║║ ║║     ║║║╠═╣║║║╠═╣
+		╚═╝ ╩     ╩ ╩╚═╝╩╚═╩═╝╩╝╚╝    ╩ ╩╝╚╝═╩╝    ═╩╝╩╩ ╩╝╚╝╩ ╩
+		\033[m"""
+		print(msg)
 		Node.solver = self
 		State.solver = self
 		self.parser = parser
 
+	def sayGoodbye(self):
+		msg = """\033[1;36m
+		╔═╗  ╔╗ ╦╔═╗╔╗╔╔╦╗╔═╗╔╦╗   ╔═╗╔╦╗   ╦╔═╗╦ ╦╔═╗╦ ╦═╗ ╦  ╔╗╔╔═╗╔═╗╦  
+		╠═╣  ╠╩╗║║╣ ║║║ ║ ║ ║ ║    ║╣  ║    ║║ ║╚╦╝║╣ ║ ║╔╩╦╝  ║║║║ ║║╣ ║  
+		╩ ╩  ╚═╝╩╚═╝╝╚╝ ╩ ╚═╝ ╩    ╚═╝ ╩   ╚╝╚═╝ ╩ ╚═╝╚═╝╩ ╚═  ╝╚╝╚═╝╚═╝╩═╝                                                                     
+		*
+     *                                                          *
+                                  *                  *        .--.
+      \/ \/  \/  \/                                        ./   /=*
+        \/     \/      *            *                ...  (_____)
+         \ ^ ^/                                       \ \_((^o^))-.    *
+         (o)(O)--)--------\.                           \   (   ) \ \._.
+         |    |  ||================((~~~~~~~~~~~~~~~~~))|   ( )   |    \ 
+          \__/             ,|        \. * * * * * * ./  (~~~~~~~~~~)    \ 
+          *        ||^||\.____./|| |          \___________/     ~||~~~~|~'\____/ *
+            || ||     || || A            ||    ||         ||    |   
+     *      <> <>     <> <>          (___||____||_____)  ((~~~~~|   *
+		\033[m"""
+		print (msg)
+	
 	def askConfig(self):
 		print("Demander a l'utiliser de choisir un algo et un heuristique\n")
 		self.heuristic = defaultHeuristic
 		self.algo = defaultAlgo
-
+		
+	"""
+	def askAgain(self):
+		print("Voulez-vous résoudre la même grille avec un autre algo ? Answer : 'Y' or 'N'.")
+		answer = input()
+		if (answer == 'Y'):
+			continue 
+		elif (answer == 'N'):
+			self.sayGoodbye()
+		else:
+			self.askAgain()
+	"""
+	
 	def parseFile(self):
-		print("Parser le fichier du puzzle a resoudre\n")
-		start = self.parser()
-		self.size = len(start)
+		self.size, start = self.parser()
 		self.actual = Node(None, State(start))
 		self.closed = [self.actual]
 		self.opened = self.actual.getAllPossibility()
@@ -59,3 +97,4 @@ class Solver:
 		self.solve()
 		self.printSolution()
 		self.printNodes()
+		self.sayGoodbye()

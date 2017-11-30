@@ -1,5 +1,6 @@
 import parser
 from solver import Solver
 
-solver = Solver(parser.parser)
-solver.start()
+if __name__ == "__main__":
+    solver = Solver(parser.parser)
+    solver.start()
