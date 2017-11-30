@@ -31,6 +31,14 @@ def check_data_in_line(line, size, nb_of_piece, list_of_my_valid_number):
         i += 1
     return list_of_my_valid_number
 
+def msg_end_parsing(grid, size):
+    print("\n\033[1;36mVous souhaitez résoudre la grille de taille " + str(size) + " suivante :\033[1;34m")
+    i = 0
+    while (i < size):
+        print(grid[i])
+        i += 1
+    print('\033[m')
+
 def parser() :
     list_of_my_valid_number = []
     list_of_all_number_to_compare = []
@@ -55,11 +63,10 @@ def parser() :
         elif size == 1 and not line.isdigit():
             print("une ligne vide ou un mauvais charactere s'est glissé dans les données d'entrées", file = sys.stderr)
             exit()
-    print("la grille fait" + str(size_of_grid) + " par " + str(size_of_grid)) #debug tmp
     i = 0
     #creation de la liste des nombres valides pour un taquin de cette taille
     nb_of_piece = size_of_grid * size_of_grid
-    print("il y a " + str(nb_of_piece) + " pieces au total")
+    #print("il y a " + str(nb_of_piece) + " pieces au total") #debug tmp
     while (i < nb_of_piece):
         list_of_all_number_to_compare.append(i)
         i+=1
@@ -72,7 +79,7 @@ def parser() :
             break
         grid.append(line.split())
         list_of_my_valid_number = check_data_in_line(grid[i], size_of_grid, nb_of_piece, list_of_my_valid_number)
-        print(grid[i]) #tmp debug
+        #print(grid[i]) #tmp debug
         i += 1
     if 0 < i < size_of_grid:
         print("il manque une ligne dans la grille", file = sys.stderr)
@@ -81,7 +88,7 @@ def parser() :
     if (not list_of_my_valid_number == list_of_all_number_to_compare):
         print("attention difference entre les nombres trouves et les nombres attendus", file = sys.stderr)
         exit()
-    print("FINALLY :\n" + str(grid))
-    return grid
+    msg_end_parsing(grid, size_of_grid)
+    return size_of_grid, grid
 
 #parser()
