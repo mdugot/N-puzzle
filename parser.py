@@ -84,4 +84,4 @@ def parser() :
     print("FINALLY :\n" + str(grid))
     return grid
 
-parser()
+#parser()
