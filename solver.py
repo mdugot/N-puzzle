@@ -30,9 +30,9 @@ class Solver:
 
 	def parseFile(self):
 		print("Parser le fichier du puzzle a resoudre\n")
-		start = self.parser()
-		self.size = len(start)
-		self.actual = Node(None, State(start))
+		self.first = self.parser()
+		self.size = len(self.first)
+		self.actual = Node(None, State(self.first))
 		self.closed = [self.actual]
 		self.opened = self.actual.getAllPossibility()
 
