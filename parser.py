@@ -10,16 +10,14 @@ def clean_comment(line):
     return line
 
 def check_data_in_line(line, size, nb_of_piece, list_of_my_valid_number):
-    if len(line) != size:
+    if not len(line) == size:
         print("la ligne ne contient pas le bon nombre d'élément", file = sys.stderr)
         exit()
-    i = 0
-    while i < size:
-        if not line[i].isdigit():
+    for nb in line:
+        if not nb.isdigit():
             print("la donnée d'une ligne n'est pas un nombre", file = sys.stderr)
             exit()
-        j = int(line[i])
-        #print("NB = " + str(nb_of_piece))
+        j = int(nb)
         if not 0 <= j < nb_of_piece:
             print("un des nombres données n'est pas correcte pour la réalisation d'un taquin = " + str(j), file = sys.stderr)
             exit()
@@ -28,7 +26,6 @@ def check_data_in_line(line, size, nb_of_piece, list_of_my_valid_number):
             exit()
         else:
             list_of_my_valid_number.append(j)
-        i += 1
     return list_of_my_valid_number
 
 def msg_end_parsing(grid, size):
@@ -40,53 +37,48 @@ def msg_end_parsing(grid, size):
     print('\033[m')
 
 def parser() :
+    first = True
     list_of_my_valid_number = []
-    list_of_all_number_to_compare = []
     nb_of_piece = 0
     grid = []
     size_of_grid = 0
-    #recherche donnée taille de la grille
-    while size_of_grid == 0:
-        try:
-            line = clean_comment(input()) #Lecture de l'entrée standard et nettoyage des commentaires
-        except EOFError:
-            print("Nous n'avons pas trouvé d'indicater de taille de taquin valide", file = sys.stderr)
-            exit()
+    #file = sys.stdin.read()
+    if len(sys.argv) == 2:
+        filename = sys.argv[1]
+    else:
+        print ("Donnez moi un fichier en argument")
+        exit()
+    try:
+        file = open(filename, "r")
+    except Exception:
+        print("fichier en argument invalide")
+        exit()
+    file = file.read()
+    file = file.split("\n")
+    #check des données lignes par lignes et enregistrement de la grille
+    for line in file:
+        line = clean_comment(line)
         size = len(line)
-        if size == 0 : #si la ligne ne contenait qu'un commentaire on passe à la suivante
+        if size == 0 : #si la ligne ne contenait qu'un commentaire ou etait vide on passe à la suivante
             continue
-        if size == 1 and line.isdigit(): #si la taille est de 1 pour la première fois et que c'est un nombre, alors il s'agit de la taille du tableau
+        elif size == 1 and line.isdigit() and first: #si la taille est de 1 pour la première fois et que c'est un nombre, alors il s'agit de la taille du tableau
             size_of_grid = int(line)
+            nb_of_piece = size_of_grid * size_of_grid
+            first = False
             if (size_of_grid < 3):
                 print("La taille de grille minimum n'est pas valide", file = sys.stderr)
                 exit()
-        elif size == 1 and not line.isdigit():
+        elif size == 1 and (not line.isdigit() or not first):
             print("une ligne vide ou un mauvais charactere s'est glissé dans les données d'entrées", file = sys.stderr)
             exit()
-    i = 0
-    #creation de la liste des nombres valides pour un taquin de cette taille
-    nb_of_piece = size_of_grid * size_of_grid
-    #print("il y a " + str(nb_of_piece) + " pieces au total") #debug tmp
-    while (i < nb_of_piece):
-        list_of_all_number_to_compare.append(i)
-        i+=1
-    #enregistrement et vérification des données d'entrée de la grille fournit
-    i = 0
-    while i >= 0:
-        try:
-            line = clean_comment(input()) #Lecture de l'entrée standard et nettoyage des commentaires
-        except EOFError:
-            break
-        grid.append(line.split())
-        list_of_my_valid_number = check_data_in_line(grid[i], size_of_grid, nb_of_piece, list_of_my_valid_number)
-        #print(grid[i]) #tmp debug
-        i += 1
-    if 0 < i < size_of_grid:
+        elif size_of_grid > 0:
+            grid.append(line.split())
+            list_of_my_valid_number = check_data_in_line(grid[-1], size_of_grid, nb_of_piece, list_of_my_valid_number)
+        else:
+            print("Une ligne du tableau n'est ni un commentaire ni un nombre")
+            exit()
+    if not len(grid) == size_of_grid or size_of_grid < 3:
         print("il manque une ligne dans la grille", file = sys.stderr)
-        exit()
-    list_of_my_valid_number = sorted(list_of_my_valid_number)
-    if (not list_of_my_valid_number == list_of_all_number_to_compare):
-        print("attention difference entre les nombres trouves et les nombres attendus", file = sys.stderr)
         exit()
     msg_end_parsing(grid, size_of_grid)
     return size_of_grid, grid

@@ -1,5 +1,6 @@
 from node import Node
 from state import State
+import sys
 
 def defaultHeuristic(state):
 	print("Aucun heuristique defini\n")
@@ -52,21 +53,15 @@ class Solver:
 		print (msg)
 	
 	def askConfig(self):
-		print("Demander a l'utiliser de choisir un algo et un heuristique\n")
+		print("Demander a l'utilisateur de choisir un algo et un heuristique\n")
 		self.heuristic = defaultHeuristic
 		self.algo = defaultAlgo
 		
-	"""
 	def askAgain(self):
-		print("Voulez-vous résoudre la même grille avec un autre algo ? Answer : 'Y' or 'N'.")
-		answer = input()
-		if (answer == 'Y'):
-			continue 
-		elif (answer == 'N'):
-			self.sayGoodbye()
-		else:
-			self.askAgain()
-	"""
+		answer = "x"
+		while answer not in "ynYN":
+			answer = input("Voulez-vous résoudre la même grille avec un autre algo ? Answer : 'Y' or 'N'.")
+		return answer 
 	
 	def parseFile(self):
 		print("Parser le fichier du puzzle a resoudre\n")
@@ -93,9 +88,14 @@ class Solver:
 		print("Afficher la solution\n")
 
 	def start(self):
+		answer = 'Y'
 		self.askConfig()
 		self.parseFile()
-		self.solve()
-		self.printSolution()
-		self.printNodes()
+		while answer in 'yY':
+			self.solve()
+			self.printSolution()
+			self.printNodes()
+			answer = self.askAgain()
+			if answer in "yY":
+				self.askConfig()
 		self.sayGoodbye()
