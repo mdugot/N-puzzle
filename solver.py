@@ -1,9 +1,11 @@
 from node import Node
 from state import State
+from heapq import heappush, heappop
+import algo
 import sys
 
 def defaultHeuristic(state):
-	print("Aucun heuristique defini\n")
+#	print("Aucun heuristique defini\n")
 	return 1
 def defaultAlgo(solver):
 	print("Aucun algorithme de resolution defini\n")
@@ -55,7 +57,7 @@ class Solver:
 	def askConfig(self):
 		print("Demander a l'utilisateur de choisir un algo et un heuristique\n")
 		self.heuristic = defaultHeuristic
-		self.algo = defaultAlgo
+		self.algo = algo.astar
 		
 	def askAgain(self):
 		answer = "x"
@@ -64,28 +66,48 @@ class Solver:
 		return answer 
 	
 	def parseFile(self):
-		print("Parser le fichier du puzzle a resoudre\n")
+		print("\nParser le fichier du puzzle a resoudre")
 		self.size, self.first = self.parser()
 		self.actual = Node(None, State(self.first))
-		self.closed = [self.actual]
-		self.opened = self.actual.getAllPossibility()
+		self.goal = State(self.getGoal(self.size))
+		self.closed = set([self.actual])
+		self.opened = []
+		self.saveNewPossibility()
+#		self.opened = self.actual.getAllPossibility()
+
+	def saveNewPossibility(self):
+		ps = self.actual.getAllPossibility()
+		for p in ps:
+			heappush(self.opened, p)
+
+	def newTry(self):
+		while len(self.opened) > 0:
+			tmp = heappop(self.opened)
+			if tmp not in self.closed:
+				self.closed.add(self.actual)
+				self.actual = tmp
+				return True
+		return False
 
 	def solve(self):
-		print("Resoudre le puzzle\n")
-		self.algo(self)
+		print("\nResoudre le puzzle")
+		if self.algo(self) == True:
+			print("Puzzle solved !")
+		else:
+			print("Puzzle unsolvable.")
 
 	def printNodes(self):
-		print("\nACTUAL NODES:\n")
+		print("\nACTUAL NODES:")
 		print(str(self.actual.state.grid))
-		print("\nCLOSED NODES:\n")
+		print("\nCLOSED NODES:")
 		for n in self.closed:
 			print(str(n.state.grid))
-		print("\nOPEN NODES:\n")
+		print("\nOPEN NODES:")
 		for n in self.opened:
 			print(str(n.state.grid))
 
 	def printSolution(self):
-		print("Afficher la solution\n")
+		print("\nAfficher la solution")
 
 	def start(self):
 		answer = 'Y'
@@ -94,8 +116,36 @@ class Solver:
 		while answer in 'yY':
 			self.solve()
 			self.printSolution()
-			self.printNodes()
+			#self.printNodes()
 			answer = self.askAgain()
 			if answer in "yY":
 				self.askConfig()
 		self.sayGoodbye()
+	
+
+	def getGoal(self, size):
+		print("\nGOAL:")
+		solution = [[-1 for x in range(size)] for y in range(size)]
+		x, y = 0, 0
+		vx, vy = 1, 0
+		value = list(range(1, 9))
+		value.append(0)
+		for i in value:
+			solution[y][x] = i
+			x += vx
+			y += vy
+			if (y < 0 or x < 0 or x >= size or y >= size or solution[y][x] != -1):
+				x -= vx
+				y -= vy
+				if (vx != 0):
+					vy = vx
+					vx = 0
+				else:
+					vx = vy * -1
+					vy = 0
+				x += vx
+				y += vy
+		print(str(solution))
+		return solution
+			
+#	def isSolved(self):

@@ -36,3 +36,14 @@ class Node:
 		if tmp != None:
 			result.append(Node(self, tmp))
 		return result
+	
+	def __hash__(self):
+		return hash(self.state)
+	
+	def __lt__(self, other):
+		return self.distanceFromBegining + self.distanceFromEnd < other.distanceFromBegining + other.distanceFromEnd
+	
+	def __eq__(self, other):
+		if other == None:
+			return False
+		return self.state == other.state

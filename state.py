@@ -20,10 +20,20 @@ class State:
 					self.y = y
 				x += 1
 			y += 1
+	
+	def __hash__(self):
+		return hash(str(self.grid))
+	
+	def __eq__(self, other):
+		if other == None:
+			return False
+		return self.grid == other.grid
 
 	# les methode moveXXX permettent de dupliquer l'objet pour creer une nouvelle grille
 	# Cette nouvelle grille est obtenue apres avoir deplace la case '0' dans le sens indique
 	# si le deplacement n'est pas possible (la case '0' est deja au bord), les methodes renvoient 'None'
+
+
 	def moveUp(self):
 		if self.y == 0:
 			return None
