@@ -2,6 +2,7 @@ from node import Node
 from state import State
 from heapq import heappush, heappop
 import algo
+import heuristic
 import sys
 
 def defaultHeuristic(state):
@@ -56,7 +57,7 @@ class Solver:
 	
 	def askConfig(self):
 		print("Demander a l'utilisateur de choisir un algo et un heuristique\n")
-		self.heuristic = defaultHeuristic
+		self.heuristic = heuristic.outOfPlace
 		self.algo = algo.astar
 		
 	def askAgain(self):
@@ -68,11 +69,11 @@ class Solver:
 	def parseFile(self):
 		print("\nParser le fichier du puzzle a resoudre")
 		self.size, self.first = self.parser()
-		self.actual = Node(None, State(self.first))
 		self.goal = State(self.getGoal(self.size))
+		self.actual = Node(None, State(self.first))
 		self.closed = set([self.actual])
 		self.opened = []
-		self.saveNewPossibility()
+		self.actual.getAllPossibility(self.opened)
 #		self.opened = self.actual.getAllPossibility()
 
 	def saveNewPossibility(self):
@@ -93,8 +94,10 @@ class Solver:
 		print("\nResoudre le puzzle")
 		if self.algo(self) == True:
 			print("Puzzle solved !")
+			return True
 		else:
 			print("Puzzle unsolvable.")
+			return False
 
 	def printNodes(self):
 		print("\nACTUAL NODES:")
@@ -108,19 +111,29 @@ class Solver:
 
 	def printSolution(self):
 		print("\nAfficher la solution")
+		path = self.getPathFromStart(self.actual)
+		for n in path:
+			print(str(n.state.grid))
 
 	def start(self):
 		answer = 'Y'
 		self.askConfig()
 		self.parseFile()
 		while answer in 'yY':
-			self.solve()
-			self.printSolution()
+			if self.solve():
+				self.printSolution()
 			#self.printNodes()
 			answer = self.askAgain()
 			if answer in "yY":
 				self.askConfig()
 		self.sayGoodbye()
+	
+	def getPathFromStart(self, node):
+		path = []
+		while node != None:
+			path.append(node)
+			node = node.parent
+		return reversed(path)
 	
 
 	def getGoal(self, size):
