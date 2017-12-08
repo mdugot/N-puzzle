@@ -81,6 +81,16 @@ def parser() :
         print("il manque une ligne dans la grille", file = sys.stderr)
         exit()
     msg_end_parsing(grid, size_of_grid)
-    return size_of_grid, grid
+    return size_of_grid, gridToInt(grid)
+
+def gridToInt(grid):
+	y = 0
+	for line in grid:
+		x = 0
+		for n in line:
+			grid[y][x] = int(grid[y][x])
+			x += 1
+		y += 1
+	return grid
 
 #parser()

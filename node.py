@@ -12,6 +12,7 @@ from heapq import heappush, heappop
 class Node:
 	solver = None
 	def __init__(self, parent, state):
+		self.deleted = False
 		self.parent = parent
 		self.state = state
 		if parent == None:
@@ -19,6 +20,7 @@ class Node:
 		else:
 			self.distanceFromBegining = parent.distanceFromBegining  + 1
 		self.distanceFromEnd = self.solver.heuristic(self.state, self.solver.goal)
+		self.distance = self.distanceFromEnd + self.distanceFromBegining
 	
 	# la methode getAllPossibility renvoit toutes les nouvelles grilles qu'il est possible d'obtenir en deplacant la case '0' de la grille contenu dans l'objet
 	# Elle renvoit un tableau d'objet 'Node' (entre 2 et 4 normallement)
@@ -26,32 +28,26 @@ class Node:
 		tmp = self.state.moveUp()
 		if tmp != None:
 			self.pushPossibility(opened, Node(self, tmp))
-#			result.append(Node(self, tmp))
 		tmp = self.state.moveDown()
 		if tmp != None:
 			self.pushPossibility(opened, Node(self, tmp))
-#			result.append(Node(self, tmp))
 		tmp = self.state.moveRight()
 		if tmp != None:
 			self.pushPossibility(opened, Node(self, tmp))
-#			result.append(Node(self, tmp))
 		tmp = self.state.moveLeft()
 		if tmp != None:
 			self.pushPossibility(opened, Node(self, tmp))
-#			result.append(Node(self, tmp))
 	
 	def __hash__(self):
 		return hash(self.state)
 	
 	def __lt__(self, other):
-		return self.distanceFromBegining + self.distanceFromEnd < other.distanceFromBegining + other.distanceFromEnd
+		return self.distance < other.distance
 	
 	def __eq__(self, other):
-		if other == None:
-			return False
-		return self.state == other.state
+		return other is not None and self.state == other.state
 	
 	def pushPossibility(self, opened, node):
 		if node in self.solver.closed:
 			return
-		heappush(opened, node)
+		opened.push(node)

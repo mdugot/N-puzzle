@@ -1,5 +1,6 @@
 from node import Node
 from state import State
+from prioritySet import PrioritySet
 from heapq import heappush, heappop
 import algo
 import heuristic
@@ -71,20 +72,22 @@ class Solver:
 		print("\nParser le fichier du puzzle a resoudre")
 		self.size, self.first = self.parser()
 		self.goal = State(self.getGoal(self.size))
+		self.goal.rehash()
 		self.actual = Node(None, State(self.first))
+		self.actual.state.rehash()
 		self.closed = set([self.actual])
-		self.opened = []
+#		self.opened = []
+		self.opened = PrioritySet()
 		self.actual.getAllPossibility(self.opened)
 #		self.opened = self.actual.getAllPossibility()
 
 	def newTry(self):
-		while len(self.opened) > 0:
-			tmp = heappop(self.opened)
-			if tmp not in self.closed:
-				self.closed.add(self.actual)
-				self.actual = tmp
-				return True
-		return False
+		tmp = self.opened.pop()
+		if tmp == None:
+			return False
+		self.closed.add(self.actual)
+		self.actual = tmp
+		return True
 
 	def solve(self):
 		print("\nResoudre le puzzle")
@@ -110,6 +113,7 @@ class Solver:
 		path = self.getPathFromStart(self.actual)
 		for n in path:
 			print(str(n.state.grid))
+		print(str(len(self.opened) + len(self.closed)))
 
 	def start(self):
 		answer = 'Y'
