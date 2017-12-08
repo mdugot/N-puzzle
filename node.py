@@ -25,19 +25,19 @@ class Node:
 	def getAllPossibility(self, opened):
 		tmp = self.state.moveUp()
 		if tmp != None:
-			heappush(opened, Node(self, tmp))
+			self.pushPossibility(opened, Node(self, tmp))
 #			result.append(Node(self, tmp))
 		tmp = self.state.moveDown()
 		if tmp != None:
-			heappush(opened, Node(self, tmp))
+			self.pushPossibility(opened, Node(self, tmp))
 #			result.append(Node(self, tmp))
 		tmp = self.state.moveRight()
 		if tmp != None:
-			heappush(opened, Node(self, tmp))
+			self.pushPossibility(opened, Node(self, tmp))
 #			result.append(Node(self, tmp))
 		tmp = self.state.moveLeft()
 		if tmp != None:
-			heappush(opened, Node(self, tmp))
+			self.pushPossibility(opened, Node(self, tmp))
 #			result.append(Node(self, tmp))
 	
 	def __hash__(self):
@@ -50,3 +50,8 @@ class Node:
 		if other == None:
 			return False
 		return self.state == other.state
+	
+	def pushPossibility(self, opened, node):
+		if node in self.solver.closed:
+			return
+		heappush(opened, node)

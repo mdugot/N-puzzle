@@ -61,10 +61,11 @@ class Solver:
 		self.algo = algo.astar
 		
 	def askAgain(self):
-		answer = "x"
-		while answer not in "ynYN":
-			answer = input("Voulez-vous résoudre la même grille avec un autre algo ? Answer : 'Y' or 'N'.")
-		return answer 
+		return "n"
+#		answer = "x"
+#		while answer not in "ynYN":
+#			answer = input("Voulez-vous résoudre la même grille avec un autre algo ? Answer : 'Y' or 'N'.")
+#		return answer 
 	
 	def parseFile(self):
 		print("\nParser le fichier du puzzle a resoudre")
@@ -75,11 +76,6 @@ class Solver:
 		self.opened = []
 		self.actual.getAllPossibility(self.opened)
 #		self.opened = self.actual.getAllPossibility()
-
-	def saveNewPossibility(self):
-		ps = self.actual.getAllPossibility()
-		for p in ps:
-			heappush(self.opened, p)
 
 	def newTry(self):
 		while len(self.opened) > 0:

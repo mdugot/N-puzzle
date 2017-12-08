@@ -9,6 +9,5 @@ def astar(solver):
 		if solver.actual.state == solver.goal:
 			return True
 		solver.actual.getAllPossibility(solver.opened)
-		#solver.saveNewPossibility()
 	return False
 		
