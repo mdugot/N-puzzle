@@ -58,7 +58,7 @@ class Solver:
 	
 	def askConfig(self):
 		print("Demander a l'utilisateur de choisir un algo et un heuristique\n")
-		self.heuristic = heuristic.outOfPlace
+		self.heuristic = heuristic.manhattanDistance
 		self.algo = algo.astar
 		
 	def askAgain(self):
@@ -113,7 +113,8 @@ class Solver:
 		path = self.getPathFromStart(self.actual)
 		for n in path:
 			print(str(n.state.grid))
-		print(str(len(self.opened) + len(self.closed)))
+		print("complexity in size : " + str(len(self.opened) + len(self.closed)))
+		print("complexity in time : " + str(len(self.closed)))
 
 	def start(self):
 		answer = 'Y'
@@ -134,17 +135,21 @@ class Solver:
 			path.append(node)
 			node = node.parent
 		return reversed(path)
-	
+
+	def getGoalPoint(self, n):
+		return self.goalPoints[n]
 
 	def getGoal(self, size):
 		print("\nGOAL:")
+		self.goalPoints = dict()
 		solution = [[-1 for x in range(size)] for y in range(size)]
 		x, y = 0, 0
 		vx, vy = 1, 0
-		value = list(range(1, 9))
+		value = list(range(1, size*size))
 		value.append(0)
 		for i in value:
 			solution[y][x] = i
+			self.goalPoints[i] = (y,x)
 			x += vx
 			y += vy
 			if (y < 0 or x < 0 or x >= size or y >= size or solution[y][x] != -1):

@@ -19,7 +19,7 @@ class Node:
 			self.distanceFromBegining = 0
 		else:
 			self.distanceFromBegining = parent.distanceFromBegining  + 1
-		self.distanceFromEnd = self.solver.heuristic(self.state, self.solver.goal)
+		self.distanceFromEnd = self.solver.heuristic(self.state)
 		self.distance = self.distanceFromEnd + self.distanceFromBegining
 	
 	# la methode getAllPossibility renvoit toutes les nouvelles grilles qu'il est possible d'obtenir en deplacant la case '0' de la grille contenu dans l'objet
