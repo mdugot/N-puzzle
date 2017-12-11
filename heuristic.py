@@ -17,3 +17,5 @@ def manhattanDistance(state):
 #			print("d="+str(abs(gy-j) + abs(gx-i)))
 	return r
 
+def defaultHeuristic(state):
+	return 1

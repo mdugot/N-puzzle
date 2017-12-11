@@ -1,0 +1,7 @@
+# cette grille a juste des lignes vides à la fin
+3
+5 4 8
+3 2 1
+0 6 7
+
+

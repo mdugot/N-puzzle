@@ -1,6 +1,0 @@
-# ceci est un commentaire # niark
- #other
-bla
-1
-1 2 3#comment
-456 #comment

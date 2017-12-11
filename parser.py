@@ -92,5 +92,3 @@ def gridToInt(grid):
 			x += 1
 		y += 1
 	return grid
-
-#parser()

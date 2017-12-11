@@ -6,11 +6,7 @@ import algo
 import heuristic
 import sys
 
-def defaultHeuristic(state):
-#	print("Aucun heuristique defini\n")
-	return 1
-def defaultAlgo(solver):
-	print("Aucun algorithme de resolution defini\n")
+
 
 # Classe principale de projet
 # contient une fonction pour parser : parser (voir fichier parser.py)
@@ -22,6 +18,20 @@ def defaultAlgo(solver):
 # contient la taille de la grille : size
 
 class Solver:
+	
+	#penser à ajouter ici les noms des nouveau algo, l'appel à la fonction et "True" si utilise des heuristiques sinon "False"
+	algoList = [
+		["astar", algo.astar, True],
+		["otherTestCopieAstar", algo.otherTestCopieAstar, False]
+		]
+	
+	#penser à ajouter ici les noms des nouveaux heuristiques et leur appel a fonction
+	heuristicList = [
+		["outOfPlace", heuristic.outOfPlace],
+		["manhattanDistance", heuristic.manhattanDistance],
+		["defaultHeuristic", heuristic.defaultHeuristic]
+		]
+	
 	def __init__(self, parser):
 		msg = """\033[1;31m
 		╦ ╦╔═╗╦  ╔═╗╔═╗╔╦╗╔═╗    ╦╔╗╔    ╔╗╔   ╔═╗╦ ╦╔═╗╔═╗╦  ╔═╗ 
@@ -57,19 +67,49 @@ class Solver:
 		print (msg)
 	
 	def askConfig(self):
-		print("Demander a l'utilisateur de choisir un algo et un heuristique\n")
-		self.heuristic = heuristic.manhattanDistance
-		self.algo = algo.astar
-		
+		self.algo, needHeuristic = self.askAlgo()
+		self.heuristic = self.askHeuristic(needHeuristic)
+	
+	def askAlgo(self):
+		print("Entrer le nombre de l'algorithme à utiliser :")
+		i = 0
+		for name in self.algoList:
+			print(str(i)+ " = " + name[0])
+			i += 1
+		while (True):
+			try:
+				algoInput = int(input("Nombre : "))
+			except:
+				continue
+			if (0 <= algoInput < i):
+				return(self.algoList[algoInput][1], self.algoList[algoInput][2])
+	
+	def askHeuristic(self, needHeuristic):
+		if (needHeuristic == True):
+			print("Cet algo nécessite une fonction heuristique, laquelle voulez-vous utiliser : ")
+			i = 0
+			for name in self.heuristicList:
+				print(str(i)+ " = " + name[0])
+				i += 1
+			while (True):
+				try:
+					heuristicInput = int(input("Nombre : "))
+				except:
+					continue
+				if (0 <= heuristicInput < i):
+					return(self.heuristicList[heuristicInput][1])
+		else:
+			print("Cet algo n'utilise pas de fonction heuristique.")
+			return(heuristic.defaultHeuristic)
+	
 	def askAgain(self):
 		return "n"
 #		answer = "x"
-#		while answer not in "ynYN":
+#		while answer not == 'y' or 'Y' or 'n' or 'N':
 #			answer = input("Voulez-vous résoudre la même grille avec un autre algo ? Answer : 'Y' or 'N'.")
 #		return answer 
 	
 	def parseFile(self):
-		print("\nParser le fichier du puzzle a resoudre")
 		self.size, self.first = self.parser()
 		self.goal = State(self.getGoal(self.size))
 		self.goal.rehash()
@@ -90,8 +130,8 @@ class Solver:
 		return True
 
 	def solve(self):
-		print("\nResoudre le puzzle")
-		if self.algo(self) == True:
+		print("\nResolution en cours, merci de patienter")
+		if self.algoList[1][1](self) == True:
 			print("Puzzle solved !")
 			return True
 		else:
@@ -127,7 +167,7 @@ class Solver:
 			answer = self.askAgain()
 			if answer in "yY":
 				self.askConfig()
-		self.sayGoodbye()
+		#self.sayGoodbye()
 	
 	def getPathFromStart(self, node):
 		path = []
