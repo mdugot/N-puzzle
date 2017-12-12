@@ -27,6 +27,7 @@ class Solver:
 	
 	#penser à ajouter ici les noms des nouveaux heuristiques et leur appel a fonction
 	heuristicList = [
+		["euclideanDistance", heuristic.euclideanDistance],
 		["outOfPlace", heuristic.outOfPlace],
 		["manhattanDistance", heuristic.manhattanDistance],
 		["defaultHeuristic", heuristic.defaultHeuristic]
@@ -152,7 +153,7 @@ class Solver:
 		print("\nAfficher la solution")
 		path = self.getPathFromStart(self.actual)
 		for n in path:
-			print(str(n.state.grid))
+			print(str(n.state.grid) + " Heuristique = " + str(n.distanceFromEnd))
 		print("complexity in size : " + str(len(self.opened) + len(self.closed)))
 		print("complexity in time : " + str(len(self.closed)))
 
