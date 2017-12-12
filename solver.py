@@ -194,7 +194,7 @@ class Solver:
 		answer = 'Y'
 		self.askConfig()
 		self.parseFile()
-		self.isSolvable()
+		#self.isSolvable()
 		while answer in 'yY':
 			if self.solve():
 				self.printSolution()
