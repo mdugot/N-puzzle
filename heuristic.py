@@ -1,5 +1,20 @@
 from math import sqrt
 
+def misplacedTiles(state):
+	r = 0
+	for y in range(state.solver.size):
+		for x in range(state.solver.size):
+			if not state.grid[y][x] == 0:
+				gy, gx = state.solver.getGoalPoint(state.grid[y][x])
+				if not gy == y and not gx == x:
+					r += 1
+	return r
+
+def misplacedTilesAndManhattan(state):
+	r = manhattanDistance(state)
+	r += misplacedTiles(state)
+	return r
+	
 def euclideanDistance(state):
 	r = 0
 	for y in range(state.solver.size):

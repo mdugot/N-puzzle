@@ -21,16 +21,18 @@ class Solver:
 	
 	#penser à ajouter ici les noms des nouveau algo, l'appel à la fonction et "True" si utilise des heuristiques sinon "False"
 	algoList = [
-		["astar", algo.astar, True],
+		["A*", algo.astar, True],
 		["otherTestCopieAstar", algo.otherTestCopieAstar, False]
 		]
 	
 	#penser à ajouter ici les noms des nouveaux heuristiques et leur appel a fonction
 	heuristicList = [
-		["euclideanDistance", heuristic.euclideanDistance],
-		["outOfPlace", heuristic.outOfPlace],
-		["manhattanDistance", heuristic.manhattanDistance],
-		["defaultHeuristic", heuristic.defaultHeuristic]
+		["Sans Heuristic chaque etape vaut 1", heuristic.defaultHeuristic],
+		["L'Euclidean Distance", heuristic.euclideanDistance],
+		["Le Manhattan Distance", heuristic.manhattanDistance],
+		["Le Misplaced Tiles", heuristic.misplacedTiles],
+		["Le Misplaced Tiles ajouté au Manhattan Distance", heuristic.misplacedTilesAndManhattan],
+		["L'Out Of Place", heuristic.outOfPlace]
 		]
 	
 	def __init__(self, parser):
