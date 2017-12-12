@@ -123,7 +123,7 @@ class Solver:
 		self.opened = PrioritySet()
 		self.actual.getAllPossibility(self.opened)
 #		self.opened = self.actual.getAllPossibility()
-
+	
 	def newTry(self):
 		tmp = self.opened.pop()
 		if tmp == None:
@@ -158,11 +158,43 @@ class Solver:
 			print(str(n.state.grid) + " Heuristique = " + str(n.distanceFromEnd))
 		print("complexity in size : " + str(len(self.opened) + len(self.closed)))
 		print("complexity in time : " + str(len(self.closed)))
+	
+	def checkIsSolvable(self):
+		nbInversion = 0
+		blank = 0
+		sequenceOne = []
+		sequenceTwo = []
+		for y in range(self.size):
+			for x in range(self.size):
+				if (not self.first[y][x] == 0):
+					sequenceOne.append(self.first[y][x])
+					sequenceTwo.append(self.first[y][x])
+		print("Liste d'inversions pour : " + str(sequenceOne))
+		for nbToTest in sequenceOne:
+			del sequenceTwo[0]
+			for nbToCompare in sequenceTwo:
+				if (nbToTest > nbToCompare):
+					nbInversion += 1
+					print(str(nbToTest) + "-" + str(nbToCompare))
+		print("Total =" + str(nbInversion))
+		if (not nbInversion % 2 == 0):
+			return False
+		return True
+
+	def isSolvable(self):
+		check = self.checkIsSolvable()
+		if (check == False):
+			print("\033[1;31mSorry, this N-Puzzle is Unsolvable")
+			#self.sayGoodbye()
+			exit()
+		else:
+			print ("This N-Puzzle is solvable")
 
 	def start(self):
 		answer = 'Y'
 		self.askConfig()
 		self.parseFile()
+		self.isSolvable()
 		while answer in 'yY':
 			if self.solve():
 				self.printSolution()
