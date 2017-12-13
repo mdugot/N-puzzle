@@ -5,6 +5,7 @@ from heapq import heappush, heappop
 import algo
 import heuristic
 import sys
+import checkIsSolvable
 
 
 
@@ -27,12 +28,12 @@ class Solver:
 	
 	#penser à ajouter ici les noms des nouveaux heuristiques et leur appel a fonction
 	heuristicList = [
-		["Sans Heuristic chaque etape vaut 1", heuristic.defaultHeuristic],
-		["L'Euclidean Distance", heuristic.euclideanDistance],
-		["Le Manhattan Distance", heuristic.manhattanDistance],
-		["Le Misplaced Tiles", heuristic.misplacedTiles],
-		["Le Misplaced Tiles ajouté au Manhattan Distance", heuristic.misplacedTilesAndManhattan],
-		["L'Out Of Place", heuristic.outOfPlace]
+		["Default (step = 1)", heuristic.defaultHeuristic],
+		["Euclidean Distance", heuristic.euclideanDistance],
+		["Manhattan Distance", heuristic.manhattanDistance],
+		["Misplaced Tiles", heuristic.misplacedTiles],
+		["Misplaced Tiles + Manhattan Distance", heuristic.misplacedTilesAndManhattan],
+		["Out Of Place", heuristic.outOfPlace]
 		]
 	
 	def __init__(self, parser):
@@ -51,10 +52,9 @@ class Solver:
 
 	def sayGoodbye(self):
 		msg = """\033[1;36m
-		╔═╗  ╔╗ ╦╔═╗╔╗╔╔╦╗╔═╗╔╦╗   ╔═╗╔╦╗   ╦╔═╗╦ ╦╔═╗╦ ╦═╗ ╦  ╔╗╔╔═╗╔═╗╦  
-		╠═╣  ╠╩╗║║╣ ║║║ ║ ║ ║ ║    ║╣  ║    ║║ ║╚╦╝║╣ ║ ║╔╩╦╝  ║║║║ ║║╣ ║  
-		╩ ╩  ╚═╝╩╚═╝╝╚╝ ╩ ╚═╝ ╩    ╚═╝ ╩   ╚╝╚═╝ ╩ ╚═╝╚═╝╩ ╚═  ╝╚╝╚═╝╚═╝╩═╝                                                                     
-		*
+╔═╗╔═╗╔═╗╔╦╗  ╔╗ ╦ ╦╔═╗  ╔═╗╔╗╔╔╦╗  ╔╦╗╔═╗╦═╗╦═╗╦ ╦  ╔═╗╦ ╦╦═╗╦╔═╗╔╦╗╔╦╗╔═╗╔═╗
+║ ╦║ ║║ ║ ║║  ╠╩╗╚╦╝║╣   ╠═╣║║║ ║║  ║║║║╣ ╠╦╝╠╦╝╚╦╝  ║  ╠═╣╠╦╝║╚═╗ ║ ║║║╠═╣╚═╗
+╚═╝╚═╝╚═╝═╩╝  ╚═╝ ╩ ╚═╝  ╩ ╩╝╚╝═╩╝  ╩ ╩╚═╝╩╚═╩╚═ ╩   ╚═╝╩ ╩╩╚═╩╚═╝ ╩ ╩ ╩╩ ╩╚═╝
      *                                                          *
                                   *                  *        .--.
       \/ \/  \/  \/                                        ./   /=*
@@ -74,14 +74,14 @@ class Solver:
 		self.heuristic = self.askHeuristic(needHeuristic)
 	
 	def askAlgo(self):
-		print("Entrer le nombre de l'algorithme à utiliser :")
+		print("Choose your Algorrithm :")
 		i = 0
 		for name in self.algoList:
 			print(str(i)+ " = " + name[0])
 			i += 1
 		while (True):
 			try:
-				algoInput = int(input("Nombre : "))
+				algoInput = int(input("Number : "))
 			except:
 				continue
 			if (0 <= algoInput < i):
@@ -89,26 +89,26 @@ class Solver:
 	
 	def askHeuristic(self, needHeuristic):
 		if (needHeuristic == True):
-			print("Cet algo nécessite une fonction heuristique, laquelle voulez-vous utiliser : ")
+			print("\nA heuristic function is necessary, choose one : ")
 			i = 0
 			for name in self.heuristicList:
 				print(str(i)+ " = " + name[0])
 				i += 1
 			while (True):
 				try:
-					heuristicInput = int(input("Nombre : "))
+					heuristicInput = int(input("Number : "))
 				except:
 					continue
 				if (0 <= heuristicInput < i):
 					return(self.heuristicList[heuristicInput][1])
 		else:
-			print("Cet algo n'utilise pas de fonction heuristique.")
+			print("Heuristic function is not necessary.")
 			return(heuristic.defaultHeuristic)
 	
 	def askAgain(self):
 		answer = "x"
 		while not answer in 'yYnN':
-			answer = input("Voulez-vous résoudre la même grille avec un autre algo ? Answer : 'Y' or 'N'.")
+			answer = input("\nDo you want to start again with the same grid ? Answer : 'Y' or 'N'.")
 		return answer 
 	
 	def parseFile(self):
@@ -132,7 +132,7 @@ class Solver:
 		return True
 
 	def solve(self):
-		print("\nResolution en cours, merci de patienter")
+		print("\nResolution in progress, please wait...")
 		if self.algoList[1][1](self) == True:
 			print("Puzzle solved !")
 			return True
@@ -151,51 +151,14 @@ class Solver:
 			print(str(n.state.grid))
 
 	def printSolution(self):
-		print("\nAfficher la solution")
 		path = self.getPathFromStart(self.actual)
 		for n in path:
-			print(str(n.state.grid) + " Heuristique = " + str(n.distanceFromEnd))
+			print(str(n.state.grid) + "heuristic cost = " + str(n.distanceFromEnd))
 		print("complexity in size : " + str(len(self.opened) + len(self.closed)))
 		print("complexity in time : " + str(len(self.closed)))
 
-	def rowPositionOfBlank(self, grid):
-		size = len(grid)
-		for y in range(size):
-			for x in range(size):
-				if (grid[y][x] == 0):
-					return y
-		return 0
-
-	def nbInversion(self, grid):
-		nbInversion = 0
-		size = len(grid)
-		sequenceOne = []
-		sequenceTwo = []
-		for y in range(size):
-			for x in range(size):
-				if (not grid[y][x] == 0):
-					sequenceOne.append(grid[y][x])
-					sequenceTwo.append(grid[y][x])
-		for nbToTest in sequenceOne:
-			del sequenceTwo[0]
-			for nbToCompare in sequenceTwo:
-				if (nbToTest > nbToCompare):
-					nbInversion += 1
-		return nbInversion
-	
-	def isSolvable(self):
-		nbInversion = 0
-		nbInversion += self.nbInversion(self.first)
-		nbInversion += self.nbInversion(self.goal.grid)
-		if self.size % 2 == 0:
-			nbInversion += self.rowPositionOfBlank(self.first)
-			nbInversion += self.rowPositionOfBlank(self.goal.grid)
-		if not nbInversion % 2 == 0:
-			return False
-		return True
-		
 	def checkIsSolvable(self):
-		check = self.isSolvable()
+		check = checkIsSolvable.isSolvable(self.size, self.first, self.goal.grid)
 		if (check == False):
 			print("\033[1;31mSorry, this N-Puzzle is Unsolvable")
 			self.sayGoodbye()
@@ -228,7 +191,6 @@ class Solver:
 		return self.goalPoints[n]
 
 	def getGoal(self, size):
-		print("\nGOAL:")
 		self.goalPoints = dict()
 		solution = [[-1 for x in range(size)] for y in range(size)]
 		x, y = 0, 0
@@ -251,7 +213,7 @@ class Solver:
 					vy = 0
 				x += vx
 				y += vy
-		print(str(solution))
+		print("GOAL : " + str(solution))
 		return solution
 			
 #	def isSolved(self):
