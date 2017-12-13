@@ -106,11 +106,10 @@ class Solver:
 			return(heuristic.defaultHeuristic)
 	
 	def askAgain(self):
-		return "n"
-#		answer = "x"
-#		while answer not == 'y' or 'Y' or 'n' or 'N':
-#			answer = input("Voulez-vous résoudre la même grille avec un autre algo ? Answer : 'Y' or 'N'.")
-#		return answer 
+		answer = "x"
+		while not answer in 'yYnN':
+			answer = input("Voulez-vous résoudre la même grille avec un autre algo ? Answer : 'Y' or 'N'.")
+		return answer 
 	
 	def parseFile(self):
 		self.size, self.first = self.parser()
@@ -158,43 +157,57 @@ class Solver:
 			print(str(n.state.grid) + " Heuristique = " + str(n.distanceFromEnd))
 		print("complexity in size : " + str(len(self.opened) + len(self.closed)))
 		print("complexity in time : " + str(len(self.closed)))
-	
-	def checkIsSolvable(self):
+
+	def rowPositionOfBlank(self, grid):
+		size = len(grid)
+		for y in range(size):
+			for x in range(size):
+				if (grid[y][x] == 0):
+					return y
+		return 0
+
+	def nbInversion(self, grid):
 		nbInversion = 0
-		blank = 0
+		size = len(grid)
 		sequenceOne = []
 		sequenceTwo = []
-		for y in range(self.size):
-			for x in range(self.size):
-				if (not self.first[y][x] == 0):
-					sequenceOne.append(self.first[y][x])
-					sequenceTwo.append(self.first[y][x])
-		print("Liste d'inversions pour : " + str(sequenceOne))
+		for y in range(size):
+			for x in range(size):
+				if (not grid[y][x] == 0):
+					sequenceOne.append(grid[y][x])
+					sequenceTwo.append(grid[y][x])
 		for nbToTest in sequenceOne:
 			del sequenceTwo[0]
 			for nbToCompare in sequenceTwo:
 				if (nbToTest > nbToCompare):
 					nbInversion += 1
-					print(str(nbToTest) + "-" + str(nbToCompare))
-		print("Total =" + str(nbInversion))
-		if (not nbInversion % 2 == 0):
+		return nbInversion
+	
+	def isSolvable(self):
+		nbInversion = 0
+		nbInversion += self.nbInversion(self.first)
+		nbInversion += self.nbInversion(self.goal.grid)
+		if self.size % 2 == 0:
+			nbInversion += self.rowPositionOfBlank(self.first)
+			nbInversion += self.rowPositionOfBlank(self.goal.grid)
+		if not nbInversion % 2 == 0:
 			return False
 		return True
-
-	def isSolvable(self):
-		check = self.checkIsSolvable()
+		
+	def checkIsSolvable(self):
+		check = self.isSolvable()
 		if (check == False):
 			print("\033[1;31mSorry, this N-Puzzle is Unsolvable")
-			#self.sayGoodbye()
+			self.sayGoodbye()
 			exit()
 		else:
-			print ("This N-Puzzle is solvable")
+			print ("\033[1;32mThis N-Puzzle is solvable\033[m")
 
 	def start(self):
 		answer = 'Y'
 		self.askConfig()
 		self.parseFile()
-		#self.isSolvable()
+		self.checkIsSolvable()
 		while answer in 'yY':
 			if self.solve():
 				self.printSolution()
@@ -202,7 +215,7 @@ class Solver:
 			answer = self.askAgain()
 			if answer in "yY":
 				self.askConfig()
-		#self.sayGoodbye()
+		self.sayGoodbye()
 	
 	def getPathFromStart(self, node):
 		path = []
