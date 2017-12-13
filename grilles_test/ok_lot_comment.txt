@@ -1,0 +1,8 @@
+# il y a plein de comment mais cela fonctionne # niark
+ #other
+3
+5 4 8#comment
+3 2 1 #comment
+#comment 0 6 7
+0 6 7
+#comment
