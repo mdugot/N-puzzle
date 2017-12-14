@@ -19,7 +19,7 @@ def check_data_in_line(line, size, nb_of_piece, list_of_my_valid_number):
             exit()
         j = int(nb)
         if not 0 <= j < nb_of_piece:
-            print("Error : One number is not valid" + str(j))
+            print("Error : One number is not valid : " + str(j))
             exit()
         elif j in list_of_my_valid_number:
             print("Error : One number is duplicated")
