@@ -172,7 +172,7 @@ class Solver:
 	def checkIsSolvable(self):
 		check = checkIsSolvable.isSolvable(self.size, self.first, self.goal.grid)
 		if (check == False):
-			print("\033[1;31mSorry, this N-Puzzle is Unsolvable")
+			print("\033[1;31mSorry, this N-Puzzle is Unsolvable\033[m")
 			self.sayGoodbye()
 			exit()
 		else:
