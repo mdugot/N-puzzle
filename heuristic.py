@@ -6,7 +6,7 @@ def misplacedTiles(state):
 		for x in range(state.solver.size):
 			if not state.grid[y][x] == 0:
 				gy, gx = state.solver.getGoalPoint(state.grid[y][x])
-				if not gy == y and not gx == x:
+				if not gy == y or not gx == x:
 					r += 1
 	return r
 
@@ -23,12 +23,16 @@ def euclideanDistance(state):
 			r += round((sqrt((gx - x)*(gx - x) + (gy - y) * (gy - y))), 0)
 	return r
 	
-def outOfPlace(state):
+def outOfRowAndColumn(state):
 	r = 0
-	for j in range(state.solver.size):
-		for i in range(state.solver.size):
-			if (state.grid[j][i] != state.solver.goal.grid[i][j]):
-				r += 1
+	for y in range(state.solver.size):
+		for x in range(state.solver.size):
+			if not state.grid[y][x] == 0:
+				gy, gx = state.solver.getGoalPoint(state.grid[y][x])
+				if not gy == y:
+					r += 1
+				if not gx == x:
+					r += 1
 	return r
 
 def manhattanDistance(state):
@@ -42,5 +46,20 @@ def manhattanDistance(state):
 #			print("d="+str(abs(gy-j) + abs(gx-i)))
 	return r
 
+def manhattanLinearConflict(state):
+	r = 0
+	for j in range(state.solver.size):
+		for i in range(state.solver.size):
+			gy, gx = state.solver.getGoalPoint(state.grid[j][i])
+			r += abs(gy-j) + abs(gx-i)
+			if gy == j:
+				for i2 in range(i + 1, state.solver.size):
+					gy2, gx2 = state.solver.getGoalPoint(state.grid[j][i2])
+					if j == gy2 and ((i2 < i and gx2 > gx) or (i2 > i and gx2 < gx)):
+						r += 2
+				
+	return r
+	
+
 def defaultHeuristic(state):
-	return 1
+	return 0

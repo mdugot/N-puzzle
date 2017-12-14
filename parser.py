@@ -74,7 +74,5 @@ def parser() :
     if not len(grid) == size_of_grid or size_of_grid < 3:
         print("Error : One line is missing")
         exit()
-    print("""\n\033[1;36m
-    Vous souhaitez résoudre la grille de taille " + str(size_of_grid) + " suivante :
-    \033[1;34m\nSTART: " + str(grid) + "\033[m""")
+    print("\n\033[1;36m\nVous souhaitez résoudre la grille de taille " + str(size_of_grid) + " suivante :\n\033[1;34m\nSTART: " + str(grid) + "\033[m")
     return size_of_grid, grid

@@ -20,7 +20,7 @@ class Node:
 		else:
 			self.distanceFromBegining = parent.distanceFromBegining  + 1
 		self.distanceFromEnd = self.solver.heuristic(self.state)
-		self.distance = self.distanceFromEnd + self.distanceFromBegining
+		self.distance = self.solver.getDistance(self)
 	
 	# la methode getAllPossibility renvoit toutes les nouvelles grilles qu'il est possible d'obtenir en deplacant la case '0' de la grille contenu dans l'objet
 	# Elle renvoit un tableau d'objet 'Node' (entre 2 et 4 normallement)
@@ -37,6 +37,7 @@ class Node:
 		tmp = self.state.moveLeft()
 		if tmp != None:
 			self.pushPossibility(opened, Node(self, tmp))
+	
 	
 	def __hash__(self):
 		return hash(self.state)

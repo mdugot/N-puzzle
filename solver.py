@@ -23,17 +23,18 @@ class Solver:
 	#penser à ajouter ici les noms des nouveau algo, l'appel à la fonction et "True" si utilise des heuristiques sinon "False"
 	algoList = [
 		["A*", algo.astar, True],
-		["otherTestCopieAstar", algo.otherTestCopieAstar, False]
+		["Uniform Cost Search", algo.uniform, False],
+		["Greedy Search", algo.greedy, True]
 		]
 	
 	#penser à ajouter ici les noms des nouveaux heuristiques et leur appel a fonction
 	heuristicList = [
-		["Default (step = 1)", heuristic.defaultHeuristic],
 		["Euclidean Distance", heuristic.euclideanDistance],
 		["Manhattan Distance", heuristic.manhattanDistance],
 		["Misplaced Tiles", heuristic.misplacedTiles],
 		["Misplaced Tiles + Manhattan Distance", heuristic.misplacedTilesAndManhattan],
-		["Out Of Place", heuristic.outOfPlace]
+		["Out Of Row And Column", heuristic.outOfRowAndColumn],
+		["Manhattan Distance + Linear Conflict", heuristic.manhattanLinearConflict]
 		]
 	
 	def __init__(self, parser):
@@ -49,6 +50,7 @@ class Solver:
 		Node.solver = self
 		State.solver = self
 		self.parser = parser
+		self.getDistance = algo.getDistanceAstar
 
 	def sayGoodbye(self):
 		msg = """\033[1;36m
@@ -123,6 +125,15 @@ class Solver:
 		self.actual.getAllPossibility(self.opened)
 #		self.opened = self.actual.getAllPossibility()
 	
+	def reinit(self):
+		self.goal = State(self.getGoal(self.size))
+		self.goal.rehash()
+		self.actual = Node(None, State(self.first))
+		self.actual.state.rehash()
+		self.closed = set([self.actual])
+		self.opened = PrioritySet()
+		self.actual.getAllPossibility(self.opened)
+	
 	def newTry(self):
 		tmp = self.opened.pop()
 		if tmp == None:
@@ -133,7 +144,7 @@ class Solver:
 
 	def solve(self):
 		print("\nResolution in progress, please wait...")
-		if self.algoList[1][1](self) == True:
+		if self.algo(self) == True:
 			print("Puzzle solved !")
 			return True
 		else:
@@ -151,9 +162,10 @@ class Solver:
 			print(str(n.state.grid))
 
 	def printSolution(self):
-		path = self.getPathFromStart(self.actual)
+		path, steps  = self.getPathFromStart(self.actual)
 		for n in path:
-			print(str(n.state.grid) + "heuristic cost = " + str(n.distanceFromEnd))
+			print(str(n.state.grid) + " heuristic cost = " + str(n.distanceFromEnd))
+		print("number of steps : " + str(steps))
 		print("complexity in size : " + str(len(self.opened) + len(self.closed)))
 		print("complexity in time : " + str(len(self.closed)))
 
@@ -178,14 +190,17 @@ class Solver:
 			answer = self.askAgain()
 			if answer in "yY":
 				self.askConfig()
+				self.reinit()
 		self.sayGoodbye()
 	
 	def getPathFromStart(self, node):
 		path = []
+		step = 0
 		while node != None:
 			path.append(node)
 			node = node.parent
-		return reversed(path)
+			step += 1
+		return (reversed(path), step)
 
 	def getGoalPoint(self, n):
 		return self.goalPoints[n]
