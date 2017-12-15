@@ -36,7 +36,6 @@ def parser() :
     nb_of_piece = 0
     grid = []
     size_of_grid = 0
-    #file = sys.stdin.read()
     if len(sys.argv) == 2:
         filename = sys.argv[1]
     else:
@@ -55,17 +54,14 @@ def parser() :
         size = len(line)
         if size == 0 : #si la ligne ne contenait qu'un commentaire ou etait vide on passe à la suivante
             continue
-        elif size == 1 and line.isdigit() and first: #si la taille est de 1 pour la première fois et que c'est un nombre, alors il s'agit de la taille du tableau
+        elif line.isdigit() and first: #si la ligne est digit c'est qu'elle ne contient qu'un nb et si c'est pour la première fois, alors il s'agit de la taille du tableau
             size_of_grid = int(line)
             nb_of_piece = size_of_grid * size_of_grid
             first = False
             if (size_of_grid < 3):
                 print("Error : the size of the grid is too small")
                 exit()
-        elif size == 1 and (not line.isdigit() or not first):
-            print("Error : One line is missing or bad character is encounter")
-            exit()
-        elif size_of_grid > 0:
+        elif not first:
             list_of_my_valid_number, intLine = check_data_in_line(line.split(), size_of_grid, nb_of_piece, list_of_my_valid_number)
             grid.append(intLine)
         else:

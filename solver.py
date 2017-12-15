@@ -84,6 +84,9 @@ class Solver:
 		while (True):
 			try:
 				algoInput = int(input("Number : "))
+			except EOFError:
+				print("\033[1;31mDon't try this please")
+				exit()
 			except:
 				continue
 			if (0 <= algoInput < i):
@@ -99,6 +102,9 @@ class Solver:
 			while (True):
 				try:
 					heuristicInput = int(input("Number : "))
+				except EOFError:
+					print("\033[1;31mDon't try this please")
+					exit()
 				except:
 					continue
 				if (0 <= heuristicInput < i):
