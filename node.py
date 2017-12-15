@@ -1,7 +1,7 @@
 from state import State
 from heapq import heappush, heappop
 
-# Classe permettant pour lister tout les etats parcourue durant la resolution
+# Classe permettant de lister tout les etats parcourue durant la resolution
 # utilise par les liste 'opened' et 'closed'
 # contient une grille du puzzle : state (voir classe State)
 # contient le nombre d'etapes precedentes : distanceFromBegining
@@ -23,7 +23,7 @@ class Node:
 		self.distance = self.solver.getDistance(self)
 	
 	# la methode getAllPossibility renvoit toutes les nouvelles grilles qu'il est possible d'obtenir en deplacant la case '0' de la grille contenu dans l'objet
-	# Elle renvoit un tableau d'objet 'Node' (entre 2 et 4 normallement)
+	# Elle renvoit un tableau d'objet 'Node' (entre 2 et 4 normalement)
 	def getAllPossibility(self, opened):
 		tmp = self.state.moveUp()
 		if tmp != None:

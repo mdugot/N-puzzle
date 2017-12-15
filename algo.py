@@ -1,3 +1,5 @@
+#regroupe les differents algo de resolution des taquins
+
 def search(solver):
 	if solver.actual.state == solver.goal:
 		return True
@@ -12,8 +14,10 @@ def search(solver):
 
 def getDistanceAstar(node):
 	return node.distanceFromEnd + node.distanceFromBegining
+	
 def getDistanceGreedy(node):
 	return node.distanceFromEnd
+	
 def getDistanceUniform(node):
 	return node.distanceFromBegining
 

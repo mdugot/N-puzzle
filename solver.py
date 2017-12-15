@@ -85,7 +85,7 @@ class Solver:
 			try:
 				algoInput = int(input("Number : "))
 			except EOFError:
-				print("\033[1;31mDon't try this please")
+				print("\033[1;31m\nDon't try this, please.\n")
 				exit()
 			except:
 				continue
@@ -103,7 +103,7 @@ class Solver:
 				try:
 					heuristicInput = int(input("Number : "))
 				except EOFError:
-					print("\033[1;31mDon't try this please")
+					print("\033[1;31m\nDon't try this, please.\n")
 					exit()
 				except:
 					continue
@@ -171,9 +171,9 @@ class Solver:
 		path, steps  = self.getPathFromStart(self.actual)
 		for n in path:
 			print(str(n.state.grid) + " heuristic cost = " + str(n.distanceFromEnd))
-		print("number of steps : " + str(steps))
-		print("complexity in size : " + str(len(self.opened) + len(self.closed)))
-		print("complexity in time : " + str(len(self.closed)))
+		print("Number of steps : " + str(steps))
+		print("Complexity in size : " + str(len(self.opened) + len(self.closed)))
+		print("Complexity in time : " + str(len(self.closed)))
 
 	def checkIsSolvable(self):
 		check = checkIsSolvable.isSolvable(self.size, self.first, self.goal.grid)
