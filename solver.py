@@ -1,4 +1,5 @@
 from node import Node
+from neural_network.neuralNetwork import Network
 from state import State
 from prioritySet import PrioritySet
 from heapq import heappush, heappop
@@ -38,6 +39,10 @@ class Solver:
 		]
 	
 	def __init__(self, parser):
+#		self.nn_manhattan = Network(9, [9, 9], 1)
+#		self.nn_manhattan.load("NN_manhattan_9x9_10x4000")
+		self.nn_uniform = Network(9, [36, 18, 9], 1)
+		self.nn_uniform.load("neural_network/network_save/uniform_36x18x9_5500_mix")
 		msg = """\033[1;31m
 		╦ ╦╔═╗╦  ╔═╗╔═╗╔╦╗╔═╗    ╦╔╗╔    ╔╗╔   ╔═╗╦ ╦╔═╗╔═╗╦  ╔═╗ 
 		║║║║╣ ║  ║  ║ ║║║║║╣     ║║║║    ║║║───╠═╝║ ║╔═╝╔═╝║  ║╣  
@@ -120,7 +125,6 @@ class Solver:
 		return answer 
 	
 	def parseFile(self):
-		self.size, self.first = self.parser()
 		self.goal = State(self.getGoal(self.size))
 		self.goal.rehash()
 		self.actual = Node(None, State(self.first))
@@ -144,8 +148,8 @@ class Solver:
 		tmp = self.opened.pop()
 		if tmp == None:
 			return False
-		self.closed.add(self.actual)
 		self.actual = tmp
+		self.closed.add(self.actual)
 		return True
 
 	def solve(self):
@@ -169,8 +173,10 @@ class Solver:
 
 	def printSolution(self):
 		path, steps  = self.getPathFromStart(self.actual)
+		gap = steps - 1
 		for n in path:
-			print(str(n.state.grid) + " heuristic cost = " + str(n.distanceFromEnd))
+			print(str(n.state.grid) + " heuristic cost = " + str(n.distanceFromEnd) + ", gap = " +  str(gap))
+			gap -= 1
 		print("Number of steps : " + str(steps))
 		print("Complexity in size : " + str(len(self.opened) + len(self.closed)))
 		print("Complexity in time : " + str(len(self.closed)))
@@ -186,6 +192,10 @@ class Solver:
 
 	def start(self):
 		answer = 'Y'
+		self.size, self.first = self.parser()
+		if self.size == 3:
+#			self.heuristicList.append(["Neural Network (train from manhattan linear-conflict dataset)", heuristic.manhattan_by_nn])
+			self.heuristicList.append(["Machine Learning By Neural Network", heuristic.uniform_by_nn])
 		self.askConfig()
 		self.parseFile()
 		self.checkIsSolvable()

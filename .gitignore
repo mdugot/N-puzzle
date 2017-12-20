@@ -1,3 +1,5 @@
+workbench/
+neural_network/workbench/
 *.swp
 # Byte-compiled / optimized / DLL files
 __pycache__/

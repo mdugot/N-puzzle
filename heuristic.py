@@ -59,7 +59,20 @@ def manhattanLinearConflict(state):
 						r += 2
 				
 	return r
-	
+
+##def manhattan_by_nn(state):
+##	if (state.solver.size != 3):
+##		return manhattanLinearConflict(state)
+##	flattened = [val for sublist in state.grid for val in sublist]
+##	result = state.solver.nn_manhattan.calculate(flattened)
+##	return result[0]
+
+def uniform_by_nn(state):
+	if (state.solver.size != 3):
+		return manhattanLinearConflict(state)
+	flattened = [val for sublist in state.grid for val in sublist]
+	result = state.solver.nn_uniform.calculate(flattened)
+	return result[0]
 
 def defaultHeuristic(state):
 	return 0
