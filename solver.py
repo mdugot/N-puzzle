@@ -12,23 +12,25 @@ import checkIsSolvable
 
 # Classe principale de projet
 # contient une fonction pour parser : parser (voir fichier parser.py)
-# contient une fonction pour resoudre le puzzle : algo (A FAIRE)
-# contient une fonction heuristique : algo (A FAIRE)
-# contient une liste de toutes les grilles pouvant etre choisi : openend (voir classe Node)
+# contient une liste de fonction pour resoudre le puzzle : algoList (voir algo.py)
+# contient une liste de fonction heuristique : heuristicList (voir heuristic.py)
+# contient une liste de toutes les grilles pouvant etre choisi : opened (voir classe Node)
 # contient une liste de toutes les grilles ayant deja ete choisi : closed (voir classe Node)
 # contient la grille actuellement selectionne : actual (voir classe Node)
+# contient la grille de départ : first
+# contient la grille de destination : goal
 # contient la taille de la grille : size
 
 class Solver:
 	
-	#penser à ajouter ici les noms des nouveau algo, l'appel à la fonction et "True" si utilise des heuristiques sinon "False"
+	# Ajouter ici les nouveaux algo, leur appel à fonction et "True" si utilise des heuristiques sinon "False"
 	algoList = [
 		["A*", algo.astar, True],
 		["Uniform Cost Search", algo.uniform, False],
 		["Greedy Search", algo.greedy, True]
 		]
 	
-	#penser à ajouter ici les noms des nouveaux heuristiques et leur appel a fonction
+	# Ajouter ici les nouveaux heuristiques et leur appel a fonction
 	heuristicList = [
 		["Euclidean Distance", heuristic.euclideanDistance],
 		["Manhattan Distance", heuristic.manhattanDistance],
@@ -59,15 +61,15 @@ class Solver:
 
 	def sayGoodbye(self):
 		msg = """\033[1;36m
-                                 ╔═╗╔═╗╔═╗╔╦╗  ╔╗ ╦ ╦╔═╗
-                                 ║ ╦║ ║║ ║ ║║  ╠╩╗╚╦╝║╣
-                         ________╚═╝╚═╝╚═╝═╩╝  ╚═╝ ╩ ╚═╝_______
-                        ★˛˚˛*˛°.˛*.˛°˛.*★* Happy New Year*★* 。*˛.
-                     ˛°_██_*.。*./ ♥ \ .˛* .˛。.˛.*.★* 2018 *★ 。*
-                   ˛. (´• ̮•)*.。*/♫.♫\*˛.* ˛_Π_____.♥ ****♥ ˛* ˛*' * ' 
-                  .°( . • . ) ˛°./• '♫ ' •\.˛*./______/~＼*. ˛*.。˛* ˛. *。
-                  *(...'•'.. ) *˛╬╬╬╬╬˛°.｜田田 ｜門｜╬╬╬╬╬*˚ .˛ *.*
-                [][][][][][][][][][][][][][][][][][][][][][][][][][][[][][]\033[m"""
+		           ╔═╗╔═╗╔═╗╔╦╗  ╔╗ ╦ ╦╔═╗
+		           ║ ╦║ ║║ ║ ║║  ╠╩╗╚╦╝║╣
+		   ________╚═╝╚═╝╚═╝═╩╝  ╚═╝ ╩ ╚═╝_______
+	       ★˛˚˛*˛°.˛*.˛°˛.*★* Happy New Year*★* 。*˛.
+	     ˛°_██_*.。*./ ♥ \ .˛* .˛。.˛.*.★* 2018 *★ 。*
+	   ˛. (´• ̮•)*.。*/♫.♫\*˛.* ˛_Π_____.♥ ****♥ ˛* ˛*' * ' 
+	   .°( . • . ) ˛°./• '♫ ' •\.˛*./______/~＼*. ˛*.。˛* ˛.
+	   *(...'•'.. ) *˛╬╬╬╬╬˛°.｜田田 ｜門｜╬╬╬╬╬*˚ .˛ *.**♥ ˛
+	[][][][][][][][][][][][][][][][][][][][][][][][][][][[][][]\033[m"""
 		print (msg)
 	
 	def askConfig(self):

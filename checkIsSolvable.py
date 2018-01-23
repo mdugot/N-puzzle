@@ -1,7 +1,7 @@
-#verifie si le taquin est solvable ou unsolvable
-#utilise la technique du nombre de cases inversées
-#si une map est de taille impair le nombre de cases inversées dans la grille de départ et de destination doit être impair
-#si une map est de taille pair ces mêmes nombres + le numéro de la ligne contenant la case blancche doit être impair
+# verifie si le taquin est solvable ou unsolvable
+# utilise la technique du nombre de cases inversées
+# si une map est de taille impair le nombre de cases inversées dans la grille de départ et de destination doit être impair
+# si une map est de taille pair ces mêmes nombres + le numéro de la ligne contenant la case blanche doit être impair
 
 def rowPositionOfBlank(size, grid):
 	for y in range(size):

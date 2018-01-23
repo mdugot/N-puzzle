@@ -1,5 +1,7 @@
 from math import sqrt
 
+# contient les differents heuristiques
+
 def misplacedTiles(state):
 	r = 0
 	for y in range(state.solver.size):
