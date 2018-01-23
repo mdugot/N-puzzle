@@ -84,7 +84,7 @@ class Solver:
 			try:
 				algoInput = int(input("Number : "))
 			except EOFError:
-				print("\033[1;31m\nDon't try this, please.\n")
+				print("\033[1;31m\nDon't try this, please.\033[0;m\n")
 				exit()
 			except:
 				continue
@@ -102,7 +102,7 @@ class Solver:
 				try:
 					heuristicInput = int(input("Number : "))
 				except EOFError:
-					print("\033[1;31m\nDon't try this, please.\n")
+					print("\033[1;31m\nDon't try this, please.\033[0;m\n")
 					exit()
 				except:
 					continue
@@ -115,7 +115,13 @@ class Solver:
 	def askAgain(self):
 		answer = "x"
 		while not answer in 'yYnN':
-			answer = input("\nDo you want to start again with the same grid ? Answer : 'Y' or 'N'.")
+			try:
+				answer = input("\nDo you want to start again with the same grid ? Answer : 'Y' or 'N'.")
+			except EOFError:
+				print("\033[1;31m\nDon't try this, please.\033[0;m\n")
+				exit()
+			except:
+				continue
 		return answer 
 	
 	def parseFile(self):
