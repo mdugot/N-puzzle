@@ -116,7 +116,7 @@ class Solver:
 	
 	def askAgain(self):
 		answer = "x"
-		while not answer in 'yYnN':
+		while not answer in 'yYnN' or len(answer) <= 0:
 			try:
 				answer = input("\nDo you want to start again with the same grid ? Answer : 'Y' or 'N'.")
 			except EOFError:
