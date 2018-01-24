@@ -1,4 +1,4 @@
-#regroupe les differents algo de resolution des taquins
+# regroupe les differents algo de resolution des taquins
 
 def search(solver):
 	if solver.actual.state == solver.goal:

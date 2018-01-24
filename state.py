@@ -1,7 +1,7 @@
 import copy
 
-# Classe represetant une grille du puzzle
-# contient un table en 2D representant la grille du puzzle : grid
+# Classe representant une grille du puzzle
+# contient une table en 2D representant la grille du puzzle : grid
 # contient les coordonnees de la case '0' : x et y
 
 class State:
