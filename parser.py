@@ -6,9 +6,9 @@ import sys
 def clean_comment(line):
     if '#' in line: # Nettoyage des potentiels commentaires :
         line = line[:line.index("#")]
-    if line[-1::] in " \n": # suppresion d'un eventuel \n ou d'un espace vide en fin de ligne créé par la supression précédente d'un commentaire
-        line = line[:-1:]
-    return line
+    #if line[-1::] in " \n": # suppresion d'un eventuel \n ou d'un espace vide en fin de ligne créé par la supression précédente d'un commentaire
+    #    line = line[:-1:]
+    return line.strip()
 
 def check_data_in_line(line, size, nb_of_piece, list_of_my_valid_number):
     intLine = []
